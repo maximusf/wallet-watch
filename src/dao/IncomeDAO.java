@@ -13,6 +13,7 @@ public class IncomeDAO {
         this.connection = connection;
     }
 
+    // Add an income to the database
     public void addIncome(Income income) throws SQLException {
         String query = "INSERT INTO income (user_id, amount, source, date) VALUES (?, ?, ?, ?)";
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
