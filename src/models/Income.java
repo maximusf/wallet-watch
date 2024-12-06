@@ -29,18 +29,33 @@ public class Income {
 
     // Mutators
     public void setId(int id) {
+        if (id <= 0) {
+            throw new IllegalArgumentException("ID cannot be negative");
+        }
         this.id = id;
     }
     public void setUserId(int userId) {
+        if (userId <= 0) {
+            throw new IllegalArgumentException("User ID cannot be negative");
+        }
         this.userId = userId;
     }
     public void setAmount(double amount) {
+        if (amount <= 0) {
+            throw new IllegalArgumentException("Amount cannot be negative");
+        }
         this.amount = amount;
     }
     public void setSource(String source) {
+        if (source == null || source.isEmpty()) {
+            throw new IllegalArgumentException("Source cannot be empty");
+        }
         this.source = source;
     }
     public void setDate(String date) {
+        if (date == null || date.isEmpty()) {
+            throw new IllegalArgumentException("Date cannot be empty");
+        }
         this.date = date;
     }
     // Accessors
