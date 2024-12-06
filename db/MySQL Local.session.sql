@@ -1,3 +1,5 @@
+-- Copyright 2024 maximusf
+
 --USE budget_tracker;
 
 -- Users Table
