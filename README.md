@@ -137,6 +137,8 @@ For more detailed commands and workflows, see `COMMANDS.md`.
 - **Planned**: Expense tracking and savings goals
 
 ---
+## Commands Reference
+[Commands](COMMANDS.md)
 
 ## License
 [MIT License](LICENSE)
