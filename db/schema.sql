@@ -15,12 +15,11 @@ CREATE TABLE IF NOT EXISTS users (
 
 -- Income Table - Income transaction records
 CREATE TABLE IF NOT EXISTS income (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    user_id INT NOT NULL, -- Foreign key linking to the users table
-    amount DECIMAL(10, 2) NOT NULL, -- Amount of income, can be negative for expenses
-    source VARCHAR(50), -- Source of income, e.g., 'Salary', 'Freelance', 'Investments'
-    date DATE NOT NULL, -- Date of the income transaction
-    FOREIGN KEY (user_id) REFERENCES users(id) -- Ensures data integrity by linking to the users table
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    user_id INT NOT NULL,          -- Links to user account
+    amount DECIMAL(10,2) NOT NULL, -- Money amount (max 99,999,999.99)
+    source VARCHAR(255) NOT NULL,  -- Where the money came from
+    date DATE NOT NULL            -- When the income was received
 );
 
 -- Expenses Table - Expense transaction records
