@@ -138,5 +138,8 @@ For more detailed commands and workflows, see `COMMANDS.md`.
 
 ---
 
+## Commands Reference
+[Commands](COMMANDS.md)
+
 ## License
 [MIT License](LICENSE)
