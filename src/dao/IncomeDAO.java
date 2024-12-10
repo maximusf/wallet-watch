@@ -1,5 +1,6 @@
 // Copyright 2024 maximusf
 // Income Data Access Object (DAO)
+
 // Handles database operations for Income records
 package dao; // package declaration
 
