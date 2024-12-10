@@ -10,22 +10,31 @@
    - Add income records with details like source, amount, and date
    - View all income records for a specific user
    - Update or delete existing income entries
+   - Robust error handling and input validation
 
-2. **Expense Tracking** (Planned):
-   - Log and categorize expenses to track spending habits
-   - Identify spending trends and patterns
+2. **Expense Tracking**:
+   - Log and categorize expenses
+   - View expense history by user
+   - Update or delete expense records
+   - Date validation and format checking
 
-3. **Savings Goals** (Planned):
-   - Set financial goals and track progress
-   - View timelines and progress reports
+3. **Admin Features**:
+   - View transactions for all users
+   - Manage records across multiple users
+   - Update/delete capabilities for any user
+   - User activity monitoring
 
-4. **Reports & Analysis** (Planned):
-   - Generate summaries of income, expenses, and savings
-   - Visualize spending and saving patterns over time
+4. **Error Handling**:
+   - Comprehensive input validation
+   - Date format verification
+   - Graceful error recovery
+   - User-friendly error messages
 
-5. **Proactive Recommendations** (Future):
-   - Suggest cost-saving measures based on spending trends
-   - Provide personalized financial insights
+5. **User Experience**:
+   - Clear menu navigation
+   - Persistent retry on invalid inputs
+   - Organized display of records
+   - Intuitive command structure
 
 ---
 
@@ -60,8 +69,14 @@ FAST Project/
 
 ## Getting Started
 
-1. **Prerequisites**:
+1a. **Extensions needed for VSCode**:
+   - SQLTools (mtxr)
+   - SQLTools MySQL/MariaDB/TiDB (mtxr)
+   - Extension Pack for Java (vscjava)
+
+1b. **Prerequisites**:
    - Java Development Kit (JDK)
+   - Powershell
    - MySQL Server
    - MySQL Connector/J 9.1.0
 
@@ -72,10 +87,10 @@ FAST Project/
    ```
 
 3. **Database Setup**:
-   - Open `db/schema.sql` in Cursor
-   - Press Ctrl+E twice to execute
+   - Open `db/schema.sql`
+   - CTRL+A then press Ctrl+E twice to execute
    - Open `db/reset_db.sql`
-   - Press Ctrl+E twice to execute
+   - CTRL+A then press Ctrl+E twice to execute
 
 4. **Compile the Code**:
    ```powershell
@@ -106,9 +121,45 @@ For more detailed commands and workflows, see `COMMANDS.md`.
 ## Core Design
 
 ### Object-Oriented Principles
-- **Encapsulation**: Financial data is modeled as classes with validation
-- **Modularity**: Separate concerns between models, DAOs, and UI
-- **Scalability**: Easy to add new features and functionality
+- **Encapsulation**: 
+  - Financial data (Income/Expense) is encapsulated in model classes
+  - Each model manages its own data validation
+  - Database operations are encapsulated in specific DAO classes
+  - User input handling is encapsulated in the Main class
+
+- **Inheritance**: 
+  - TransactionDAO serves as the parent class for database operations
+  - IncomeDAO and ExpenseDAO inherit and extend base functionality
+  - Common CRUD operations are reused through inheritance
+  - Error handling patterns are inherited consistently
+
+- **Polymorphism**: 
+  - TransactionDAO methods work with different transaction types
+  - Each DAO implements specific behavior for its model type
+  - Generic database operations handle different data models
+  - Error handling works uniformly across different operations
+
+- **Abstraction**: 
+  - DAO pattern abstracts database operations from business logic
+  - Model classes abstract data representation
+  - Menu system abstracts user interaction
+  - Error handling abstracts input validation and recovery
+
+### Design Patterns
+- **Modularity**: 
+  - Clear separation between models, DAOs, and UI
+  - Each class has a single responsibility
+  - Easy to maintain and extend functionality
+
+- **Error Handling**:
+  - Exception handling at appropriate levels
+  - User-friendly error messages
+  - Retry mechanisms for invalid inputs
+
+- **Data Access**:
+  - DAO pattern for database operations
+  - Transaction management
+  - Prepared statements for security
 
 ### Database Integration
 - MySQL database with relational integrity
@@ -147,9 +198,6 @@ For more detailed commands and workflows, see `COMMANDS.md`.
 - **Planned**: Expense tracking and savings goals
 
 ---
-## Commands Reference
-[Commands](COMMANDS.md)
-
 ## Commands Reference
 [Commands](COMMANDS.md)
 
