@@ -1,97 +1,89 @@
-# VSCode Extensions Required:
-- SQLTools (mtxr)
-- SQLTools MySQL/MariaDB/TiDB (mtxr)
+# Wallet-Watch
+
+**Wallet-Watch** is a personal budget management tool designed to help users efficiently track their **income**, **expenses**, and **savings goals**. Built with object-oriented programming principles and backed by a MySQL database, Wallet-Watch empowers users to make informed financial decisions.
 
 ---
 
-# **Wallet-Watch**
+## Features
 
-**Wallet-Watch** is a personal budget management tool designed to help individuals efficiently track their income, expenses, and savings goals. It’s ideal for students, professionals, and anyone who wants an intuitive, structured way to manage their finances and make informed financial decisions.
+1. **Income Management**:
+   - Add income records with details like source, amount, and date.
+   - View all income records for a specific user.
+   - Update or delete existing income entries.
 
----
+2. **Expense Tracking** (Planned):
+   - Log and categorize expenses to track spending habits.
 
-## **Overview**
-Wallet-Watch provides a streamlined experience for tracking financial data, offering a simple interface for managing:
+3. **Savings Goals** (Planned):
+   - Set financial goals and track progress.
 
-- **Income**: Log sources (e.g., salary, freelance, investments) with details like amount, source, and date.
-- **Expenses**: Categorize spending (e.g., food, rent, transportation) to understand trends.
-- **Savings Goals**: Set financial targets, track progress, and view timelines to achieve specific goals.
+4. **Trend Analysis** (Planned):
+   - Visualize spending and saving patterns over time.
 
----
-
-## **Target Audience**
-Wallet-Watch primarily appeals to:
-1. **College Students**: Those starting to manage their finances and seeking a straightforward tool.
-2. **Young Professionals**: Individuals balancing multiple income sources and monthly expenses.
-3. **Budget-Conscious Individuals**: Anyone wanting to monitor financial activity and make better spending decisions.
-
-The design prioritizes simplicity and robustness to appeal to users seeking efficient personal finance management.
+5. **Proactive Recommendations** (Future):
+   - Suggest cost-saving measures based on spending trends.
 
 ---
 
-## **How It Works**
-1. **Data Models**:
-   - The application employs **object-oriented programming (OOP)** principles, using classes like `Income`, `Expense`, and `SavingsGoal` to represent financial data.
-   - DAOs (Data Access Objects) handle database interactions, ensuring modular and maintainable code.
+## Project Design
 
-2. **Database Integration**:
-   - A MySQL database securely stores user data, enabling efficient access and updates.
-   - The database structure includes `users`, `income`, `expenses`, and `savings_goals` tables, ensuring data integrity through relational links.
+### Object-Oriented Principles
+- **Encapsulation**: Financial data is modeled as classes like `Income`, ensuring data integrity through validation.
+- **Modularity**: DAOs handle database interactions, keeping business logic separate.
+- **Scalability**: The modular design allows for easy addition of new features.
 
-3. **User Interaction**:
-   - The current version uses a **command-line interface (CLI)** for input, allowing users to:
-     - Add, edit, and view financial records.
-     - Check savings progress.
-     - Generate simple reports.
-
-4. **Scalability**:
-   - The modular design allows for future enhancements, such as a web-based UI using frameworks like ReactJS.
+### Database Integration
+- MySQL is used to store user, income, and expense data.
+- The `income` table tracks:
+  - ID
+  - User ID
+  - Amount
+  - Source
+  - Date
 
 ---
 
-## **Features**
-### **1. Income Tracking**
-- Log income sources with descriptions, amounts, and dates.
-- View summaries of monthly or yearly income.
+## How to Run
 
-### **2. Expense Management**
-- Categorize expenses to identify spending trends.
-- Generate reports to visualize category-based spending.
+1. **Clone the Repository**:
+   ```bash
+   git clone https://github.com/yourusername/wallet-watch.git
+   cd wallet-watch
+   ```
 
-### **3. Savings Goals**
-- Set target amounts and deadlines.
-- Track progress toward financial goals with clear contributions.
+2. **Set Up the Database**:
+   - Run `MySQL Local.session.sql` to create the required tables.
 
-### **4. User-Friendly Reports (Planned)**
-- Summarize income vs. expenses over a selected period.
-- Highlight savings progress and spending patterns.
+3. **Compile and Run the Project**:
+   ```bash
+   javac -d bin src/**/*.java
+   java -cp bin Main
+   ```
 
----
-
-## **Project Requirements**
-Wallet-Watch meets key requirements of a software development project:
-1. **Demonstrates Object-Oriented Principles**:
-   - **Encapsulation**: Financial entities (e.g., `Income`, `Expense`) are self-contained with attributes and methods.
-   - **Inheritance**: Shared properties and behaviors are abstracted efficiently.
-   - **Polymorphism**: Methods adapt dynamically to display or manipulate data based on context.
-
-2. **Database Usage**:
-   - Implements a relational database (MySQL) for storing and retrieving financial data.
-
-3. **Real-World Utility**:
-   - Provides a practical, relatable solution for financial management.
-
-4. **Expandability**:
-   - Modular design supports future features like predictive analysis and web-based interfaces.
+4. **Interact with the CLI**:
+   - Add income records, view records, and more.
 
 ---
 
-## **Why Wallet-Watch is Unique**
-- **Core Simplicity**: Focuses on essential features for financial tracking without unnecessary complexity.
-- **Scalable Design**: Built with OOP and MySQL, ensuring it can grow with user needs.
-- **Educational Value**: Serves as an excellent demonstration of OOP, database integration, and CLI design.
+## Future Enhancements
+
+1. **API Integration**:
+   - Connect with public APIs (e.g., GasBuddy) for real-time recommendations.
+   - Fetch bank transactions for automated updates.
+
+2. **Web-Based UI**:
+   - Build an interactive front-end for enhanced user experience.
+
+3. **Advanced Analytics**:
+   - Provide trend analysis and spending comparisons.
 
 ---
 
-## **Summary**
-Wallet-Watch is more than a budget tracker—it’s a tool for building financial literacy and habits. By emphasizing functionality and scalability, it satisfies the requirements of a solid software project while delivering real-world value to users managing their finances.
+## Project Status
+- Current Focus: Income management module.
+- Planned: Expense tracking and savings goals.
+
+---
+
+## License
+[MIT License](LICENSE)

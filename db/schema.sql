@@ -1,17 +1,20 @@
 -- Copyright 2024 maximusf
+-- Database schema for Wallet-Watch application
 
---USE budget_tracker;
+-- Create database if it doesn't exist
+CREATE DATABASE IF NOT EXISTS budget_tracker;
+USE budget_tracker;
 
--- Users Table
-CREATE TABLE users (
+-- Users Table - Core user information
+CREATE TABLE IF NOT EXISTS users (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100) NOT NULL,  -- Increased length for diverse names
     email VARCHAR(320) UNIQUE NOT NULL,  -- Increased length for email standards
     password VARCHAR(255) NOT NULL  -- Appropriate for storing hashed passwords
 );
 
--- Income Table
-CREATE TABLE income (
+-- Income Table - Income transaction records
+CREATE TABLE IF NOT EXISTS income (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL, -- Foreign key linking to the users table
     amount DECIMAL(10, 2) NOT NULL, -- Amount of income, can be negative for expenses
@@ -20,8 +23,8 @@ CREATE TABLE income (
     FOREIGN KEY (user_id) REFERENCES users(id) -- Ensures data integrity by linking to the users table
 );
 
--- Expenses Table
-CREATE TABLE expenses (
+-- Expenses Table - Expense transaction records
+CREATE TABLE IF NOT EXISTS expenses (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
     amount DECIMAL(10, 2) NOT NULL, -- Amount of expense, can be negative for income
@@ -30,8 +33,8 @@ CREATE TABLE expenses (
     FOREIGN KEY (user_id) REFERENCES users(id) 
 );
 
--- Savings Goals Table
-CREATE TABLE savings_goals (
+-- Savings Goals Table - User savings targets
+CREATE TABLE IF NOT EXISTS savings_goals (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL, 
     goal_amount DECIMAL(10, 2) NOT NULL, -- Target amount for the savings goal
