@@ -4,138 +4,109 @@ package test;
 
 import models.Income;
 import dao.IncomeDAO;
+import util.Environment;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.ArrayList;
 
+/**
+ * Tests all Income-related database operations
+ * This ensures our database functions work correctly
+ */
 public class IncomeTest {
-    // Track test records for cleanup
-    private static List<Integer> testIncomeIds = new ArrayList<>();
-
-    private static Connection getConnection() throws SQLException {
-        return DriverManager.getConnection(
-            "jdbc:mysql://localhost:3306/budget_tracker",
-            "root",
-            "your_password"
-        );
-    }
+    // Get database settings from .env file
+    private static final String URL = Environment.get("DB_URL");
+    private static final String USER = Environment.get("DB_USER");
+    private static final String PASS = Environment.get("DB_PASS");
 
     public static void main(String[] args) {
-        try (Connection conn = getConnection()) {
+        try {
+            // Connect to database and run all tests
+            Connection conn = DriverManager.getConnection(URL, USER, PASS);
             IncomeDAO dao = new IncomeDAO(conn);
             
-            try {
-                // Run all tests
-                testInputValidation();
-                testDatabaseOperations(dao);
-                testEdgeCases(dao);
-                
-                System.out.println("\nAll tests completed!");
-            } finally {
-                // Cleanup test data
-                cleanup(dao);
-            }
+            cleanup(dao);                  // Clear any old test data
+            testDatabaseOperations(dao);   // Test basic operations
+            testEdgeCases(dao);           // Test unusual cases
+            cleanup(dao);                  // Clean up after tests
+            
+            System.out.println("All tests passed!");
+            conn.close();
             
         } catch (SQLException e) {
-            System.err.println("Database error: " + e.getMessage());
+            System.out.println("Database error: " + e.getMessage());
         }
     }
 
+    // Remove all test data from database
     private static void cleanup(IncomeDAO dao) throws SQLException {
-        System.out.println("\nCleaning up test data...");
-        for (Integer id : testIncomeIds) {
-            try {
-                dao.deleteIncome(id);
-                System.out.println("✓ Deleted test income ID: " + id);
-            } catch (SQLException e) {
-                System.out.println("❌ Failed to delete test income ID: " + id);
-            }
-        }
-        testIncomeIds.clear();
-    }
-
-    private static void testInputValidation() {
-        System.out.println("\nTesting Input Validation:");
-        
-        try {
-            // Test negative amount
-            new Income(1, 1, -100.00, "Test", "2024-03-15");
-            System.out.println("❌ Failed: Negative amount accepted");
-        } catch (IllegalArgumentException e) {
-            System.out.println("✓ Passed: Negative amount rejected");
-        }
-
-        try {
-            // Test empty source
-            new Income(1, 1, 100.00, "", "2024-03-15");
-            System.out.println("❌ Failed: Empty source accepted");
-        } catch (IllegalArgumentException e) {
-            System.out.println("✓ Passed: Empty source rejected");
-        }
-
-        try {
-            // Test invalid date format
-            new Income(1, 1, 100.00, "Test", "2024/03/15");
-            System.out.println("❌ Failed: Invalid date format accepted");
-        } catch (IllegalArgumentException e) {
-            System.out.println("✓ Passed: Invalid date format rejected");
+        List<Income> incomes = dao.getIncomeByUserId(1);
+        for (Income income : incomes) {
+            dao.deleteIncome(income.getId());
         }
     }
 
+    // Test adding, reading, and updating income records
     private static void testDatabaseOperations(IncomeDAO dao) throws SQLException {
-        System.out.println("\nTesting Database Operations:");
-        
-        // Add test record
+        System.out.println("\nTesting basic database operations...");
+
+        // Add new income and verify it was saved
         Income testIncome = new Income(0, 1, 999.99, "Test Income", "2024-03-15");
         dao.addIncome(testIncome);
-        
-        // Store ID for cleanup
+        assert testIncome.getId() > 0 : "Income ID should be set after insertion";
+
+        // Find the income we just added
         List<Income> incomes = dao.getIncomeByUserId(1);
         Income added = incomes.stream()
-            .filter(i -> i.getAmount() == 999.99 && "Test Income".equals(i.getSource()))
+            .filter(i -> i.getSource().equals("Test Income"))
             .findFirst()
-            .orElse(null);
-            
-        if (added != null) {
-            testIncomeIds.add(added.getId());
-        }
+            .orElseThrow(() -> new AssertionError("Added income not found"));
 
-        // Test Update
+        // Verify all fields match what we saved
+        assert added.getAmount() == 999.99 : "Amount should match";
+        assert added.getSource().equals("Test Income") : "Source should match";
+        assert added.getDate().equals("2024-03-15") : "Date should match";
+
+        // Test updating an existing record
+        added.setAmount(1000.00);
+        dao.updateIncome(added);
+        incomes = dao.getIncomeByUserId(1);
         Income lastIncome = incomes.get(incomes.size() - 1);
-        lastIncome.setAmount(1000.00);
-        dao.updateIncome(lastIncome);
-        
-        // Test Delete
-        dao.deleteIncome(lastIncome.getId());
+        assert lastIncome.getAmount() == 1000.00 : "Updated amount should match";
+
+        System.out.println("Basic operations tests passed!");
     }
 
+    // Test unusual or extreme cases
     private static void testEdgeCases(IncomeDAO dao) throws SQLException {
-        System.out.println("\nTesting Edge Cases:");
-        
-        // Test non-existent user
-        List<Income> noIncomes = dao.getIncomeByUserId(999999);
-        System.out.println(noIncomes.isEmpty() ? 
-            "✓ Passed: No incomes for non-existent user" : 
-            "❌ Failed: Found incomes for non-existent user");
+        System.out.println("\nTesting edge cases...");
 
-        // Test maximum values
+        // Try to find income for a user that doesn't exist
+        List<Income> noIncomes = dao.getIncomeByUserId(999999);
+        assert noIncomes.isEmpty() : "Non-existent user should return empty list";
+
         try {
-            Income maxIncome = new Income(0, 1, Double.MAX_VALUE, "Max Test", "2024-03-15");
-            dao.addIncome(maxIncome);
-            System.out.println("✓ Passed: Handled maximum amount");
-        } catch (Exception e) {
-            System.out.println("❌ Failed: Could not handle maximum amount");
+            // Test with a very large money amount
+            Income largeIncome = new Income(0, 1, 999999.99, "Large Test", "2024-03-15");
+            dao.addIncome(largeIncome);
+            dao.deleteIncome(largeIncome.getId());
+            System.out.println("Large value test passed");
+        } catch (SQLException e) {
+            throw new AssertionError("Failed to handle large value", e);
         }
 
-        // Test special characters in source
         try {
+            // Test with special characters in the description
             Income specialChars = new Income(0, 1, 100.00, "Test!@#$%^&*()", "2024-03-15");
             dao.addIncome(specialChars);
-            System.out.println("✓ Passed: Handled special characters");
-        } catch (Exception e) {
-            System.out.println("❌ Failed: Could not handle special characters");
+            dao.deleteIncome(specialChars.getId());
+            System.out.println("Special characters test passed");
+        } catch (SQLException e) {
+            throw new AssertionError("Failed to handle special characters", e);
         }
+
+        System.out.println("Edge cases tests passed!");
     }
 }

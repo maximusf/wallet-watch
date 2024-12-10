@@ -1,4 +1,12 @@
+# Environment variables and sensitive data
 .env
+
+# VSCode settings
 .vscode/
-*.log
+
+# Node.js modules
 node_modules/
+
+# Compiled Java classes
+bin/
+*.class
