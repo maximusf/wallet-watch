@@ -73,6 +73,7 @@ FAST Project/
    - SQLTools (mtxr)
    - SQLTools MySQL/MariaDB/TiDB (mtxr)
    - Extension Pack for Java (vscjava)
+   - PowerShell (ms-vscode)
 
 1b. **Prerequisites**:
    - Java Development Kit (JDK)
