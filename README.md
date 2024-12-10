@@ -97,6 +97,10 @@ FAST Project/
    ```powershell
    javac -d bin src/Main.java src/dao/IncomeDAO.java src/dao/ExpenseDAO.java src/dao/TransactionDAO.java src/models/Income.java src/models/Expense.java src/models/Transaction.java
    ```
+   Or use the PowerShell commands from [COMMANDS.md](COMMANDS.md):
+   ```powershell
+   .\run.ps1 compile
+   ```
 
 5. **Run the Application**:
    ```powershell
