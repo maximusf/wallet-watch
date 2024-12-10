@@ -1,0 +1,8 @@
+*.sql linguist-language=SQL
+*.env linguist-language=Env
+*.java linguist-language=Java
+*.txt linguist-language=Markdown
+*.md linguist-language=Markdown
+
+
+
