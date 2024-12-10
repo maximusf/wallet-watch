@@ -1,5 +1,6 @@
-// Copyright 2024 maximusf
-// Income Test
+// IncomeTest.java
+// Copyright 2024 maximusf  
+
 package test;
 
 import models.Income;
@@ -42,9 +43,9 @@ public class IncomeTest {
 
     // Remove all test data from database
     private static void cleanup(IncomeDAO dao) throws SQLException {
-        List<Income> incomes = dao.getIncomeByUserId(1);
+        List<Income> incomes = dao.getByUserId(1);
         for (Income income : incomes) {
-            dao.deleteIncome(income.getId());
+            dao.deleteById(income.getId());
         }
     }
 
@@ -54,11 +55,11 @@ public class IncomeTest {
 
         // Add new income and verify it was saved
         Income testIncome = new Income(0, 1, 999.99, "Test Income", "2024-03-15");
-        dao.addIncome(testIncome);
+        dao.add(testIncome);
         assert testIncome.getId() > 0 : "Income ID should be set after insertion";
 
         // Find the income we just added
-        List<Income> incomes = dao.getIncomeByUserId(1);
+        List<Income> incomes = dao.getByUserId(1);
         Income added = incomes.stream()
             .filter(i -> i.getSource().equals("Test Income"))
             .findFirst()
@@ -71,8 +72,8 @@ public class IncomeTest {
 
         // Test updating an existing record
         added.setAmount(1000.00);
-        dao.updateIncome(added);
-        incomes = dao.getIncomeByUserId(1);
+        dao.update(added);
+        incomes = dao.getByUserId(1);
         Income lastIncome = incomes.get(incomes.size() - 1);
         assert lastIncome.getAmount() == 1000.00 : "Updated amount should match";
 
@@ -84,14 +85,14 @@ public class IncomeTest {
         System.out.println("\nTesting edge cases...");
 
         // Try to find income for a user that doesn't exist
-        List<Income> noIncomes = dao.getIncomeByUserId(999999);
+        List<Income> noIncomes = dao.getByUserId(999999);
         assert noIncomes.isEmpty() : "Non-existent user should return empty list";
 
         try {
             // Test with a very large money amount
             Income largeIncome = new Income(0, 1, 999999.99, "Large Test", "2024-03-15");
-            dao.addIncome(largeIncome);
-            dao.deleteIncome(largeIncome.getId());
+            dao.add(largeIncome);
+            dao.deleteById(largeIncome.getId());
             System.out.println("Large value test passed");
         } catch (SQLException e) {
             throw new AssertionError("Failed to handle large value", e);
@@ -100,8 +101,8 @@ public class IncomeTest {
         try {
             // Test with special characters in the description
             Income specialChars = new Income(0, 1, 100.00, "Test!@#$%^&*()", "2024-03-15");
-            dao.addIncome(specialChars);
-            dao.deleteIncome(specialChars.getId());
+            dao.add(specialChars);
+            dao.deleteById(specialChars.getId());
             System.out.println("Special characters test passed");
         } catch (SQLException e) {
             throw new AssertionError("Failed to handle special characters", e);

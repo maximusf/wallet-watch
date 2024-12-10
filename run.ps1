@@ -24,17 +24,28 @@ Commands:
 }
 
 function Start-Compilation {
-    Write-Host "Compiling project..." -ForegroundColor Yellow
-    if (-not (Test-Path "bin")) {
-        New-Item -ItemType Directory -Path "bin"
-    }
-    $javaFiles = Get-ChildItem -Path "src" -Filter "*.java" -Recurse | ForEach-Object { $_.FullName }
-    & javac -d bin -cp "src;lib\mysql-connector-j-9.1.0.jar" $javaFiles
+    Write-Host "Compiling source files..." -ForegroundColor Yellow
+    
+    $sourceFiles = @(
+        "src/util/Environment.java",
+        "src/models/Transaction.java",
+        "src/models/Income.java",
+        "src/models/Expense.java",
+        "src/dao/TransactionDAO.java",
+        "src/dao/IncomeDAO.java",
+        "src/dao/ExpenseDAO.java",
+        "src/test/IncomeTest.java",
+        "src/test/ExpenseTest.java",
+        "src/Main.java"
+    )
+    
+    & javac -d bin -cp "lib\mysql-connector-j-9.1.0.jar" $sourceFiles
+    
     if ($LASTEXITCODE -eq 0) {
-        Write-Host "Compilation successful" -ForegroundColor Green
+        Write-Host "Compilation successful!" -ForegroundColor Green
         return $true
     } else {
-        Write-Host "Compilation failed" -ForegroundColor Red
+        Write-Host "Compilation failed!" -ForegroundColor Red
         return $false
     }
 }
@@ -49,12 +60,17 @@ function Start-MainProgram {
 }
 
 function Start-Tests {
-    if (-not (Test-Path "bin/test/IncomeTest.class")) {
+    if (-not (Test-Path "bin/test/IncomeTest.class") -or -not (Test-Path "bin/test/ExpenseTest.class")) {
         Write-Host "Tests not compiled. Running compilation first..." -ForegroundColor Yellow
         if (-not (Start-Compilation)) { return }
     }
     Write-Host "Running tests..." -ForegroundColor Yellow
+    
+    Write-Host "`nRunning Income Tests:" -ForegroundColor Cyan
     & java -cp "bin;lib\mysql-connector-j-9.1.0.jar" test.IncomeTest
+    
+    Write-Host "`nRunning Expense Tests:" -ForegroundColor Cyan
+    & java -cp "bin;lib\mysql-connector-j-9.1.0.jar" test.ExpenseTest
 }
 
 function Reset-Database {

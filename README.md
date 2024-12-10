@@ -38,18 +38,22 @@ FAST Project/
 ├── db/
 │   ├── schema.sql    # Database structure
 │   ├── reset_db.sql  # Reset and test data
-│   └── queries/      # SQL queries for development
-│       └── sample_queries.sql
+│   └── queries/      # SQL queries for reference
 ├── lib/
 │   └── mysql-connector-j-9.1.0.jar
 └── src/
-    ├── dao/          # Data Access Objects
-    │   └── IncomeDAO.java
-    ├── models/       # Data models
-    │   └── Income.java
-    ├── test/         # Test classes
-    │   └── IncomeTest.java
-    └── Main.java     # Application entry point
+    ├── dao/
+    │   ├── TransactionDAO.java
+    │   ├── IncomeDAO.java
+    │   └── ExpenseDAO.java
+    ├── models/
+    │   ├── Transaction.java
+    │   ├── Income.java
+    │   └── Expense.java
+    ├── test/
+    │   ├── IncomeTest.java
+    │   └── ExpenseTest.java
+    └── Main.java
 ```
 
 ---
@@ -73,9 +77,9 @@ FAST Project/
    - Open `db/reset_db.sql`
    - Press Ctrl+E twice to execute
 
-4. **Compile the Project**:
+4. **Compile the Code**:
    ```powershell
-   javac -d bin src/Main.java src/dao/IncomeDAO.java src/models/Income.java
+   javac -d bin src/Main.java src/dao/IncomeDAO.java src/dao/ExpenseDAO.java src/dao/TransactionDAO.java src/models/Income.java src/models/Expense.java src/models/Transaction.java
    ```
 
 5. **Run the Application**:
@@ -83,10 +87,16 @@ FAST Project/
    java -cp "bin;lib\mysql-connector-j-9.1.0.jar" Main
    ```
 
-6. **Run Tests** (Optional):
+6. **Run Tests**:
    ```powershell
-   javac -d bin src/test/IncomeTest.java src/models/Income.java src/dao/IncomeDAO.java
+   # Compile tests
+   javac -d bin src/test/IncomeTest.java src/test/ExpenseTest.java src/models/Income.java src/models/Expense.java src/models/Transaction.java src/dao/IncomeDAO.java src/dao/ExpenseDAO.java src/dao/TransactionDAO.java
+   
+   # Run Income tests
    java -cp "bin;lib\mysql-connector-j-9.1.0.jar" test.IncomeTest
+   
+   # Run Expense tests
+   java -cp "bin;lib\mysql-connector-j-9.1.0.jar" test.ExpenseTest
    ```
 
 For more detailed commands and workflows, see `COMMANDS.md`.
