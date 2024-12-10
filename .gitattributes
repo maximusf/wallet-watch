@@ -1,5 +1,5 @@
-*.sql linguist-language=SQL
-*.env linguist-language=Env
-*.java linguist-language=Java
-*.txt linguist-language=Markdown
-*.md linguist-language=Markdown
+*.sql linguist-detectable=true
+*.env linguist-detectable=true
+*.java linguist-detectable=true
+*.txt linguist-detectable=true
+*.md linguist-detectable=true
