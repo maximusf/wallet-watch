@@ -128,25 +128,25 @@ For more detailed commands and workflows, see `COMMANDS.md`.
 ## Core Design
 
 ### Object-Oriented Principles
-- **Service Layer Pattern**: 
-  - Business logic separated into IncomeService and ExpenseService
-  - Each service handles its specific domain operations
-  - Validation and error handling encapsulated in services
+- **Inheritance**: 
+  - Transaction class serves as parent for Income and Expense
+  - Common fields (id, userId, amount, date) inherited
+  - Shared validation logic in parent class
 
-- **Builder Pattern**: 
-  - PrintBuilder for consistent message formatting
-  - Method chaining for readable code
-  - Centralized output handling
+- **Polymorphism**: 
+  - Service classes implement common interfaces
+  - DAO classes handle different transaction types
+  - PrintBuilder methods adapt to different message types
 
-- **Data Access Objects**: 
-  - Database operations encapsulated in DAO classes
-  - Clean separation of concerns
-  - Consistent error handling
+- **Encapsulation**: 
+  - Private fields with public getters/setters
+  - Database operations hidden behind DAO layer
+  - Business logic contained within service classes
 
-- **Environment Management**: 
-  - Secure configuration handling
-  - Database credentials protection
-  - Centralized environment variables
+- **Abstraction**: 
+  - Service layer abstracts business rules
+  - DAO layer abstracts database operations
+  - PrintBuilder abstracts output formatting
 
 ### Key Components
 - **PrintBuilder**: 
