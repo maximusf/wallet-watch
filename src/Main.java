@@ -4,13 +4,13 @@
 // Project-specific imports
 import dao.*;          // Database Access Objects (IncomeDAO, ExpenseDAO)
 import services.*;     // Service layer (IncomeService, ExpenseService)
-import util.*;        // Utility classes (PrintBuilder, Environment)
+import util.*;         // Utility classes (PrintBuilder, Environment)
 
 // Java standard imports
-import java.sql.Connection; // for database connection
-import java.sql.DriverManager; // for database connection
-import java.sql.SQLException; // for database errors
-import java.util.Scanner; // for user input
+import java.sql.Connection;        // for database connection
+import java.sql.DriverManager;     // for database connection
+import java.sql.SQLException;      // for database errors
+import java.util.Scanner;          // for user input
 
 /**
  * Main application class for Wallet-Watch

@@ -19,30 +19,6 @@ public class IncomeDAO extends TransactionDAO<Income> {
     }
 
     @Override
-    public List<Income> getByUserId(int userId) throws SQLException {
-        List<Income> incomes = new ArrayList<>();
-        String sql = "SELECT * FROM income WHERE user_id = ?";
-        
-        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setInt(1, userId);
-            
-            try (ResultSet rs = stmt.executeQuery()) {
-                while (rs.next()) {
-                    Income income = new Income(
-                        rs.getInt("id"),
-                        rs.getInt("user_id"),
-                        rs.getDouble("amount"),
-                        rs.getString("source"),
-                        rs.getString("date")
-                    );
-                    incomes.add(income);
-                }
-            }
-        }
-        return incomes;
-    }
-
-    @Override
     public Income add(Income income) throws SQLException {
         String sql = "INSERT INTO income (user_id, amount, source, date) VALUES (?, ?, ?, ?)";
         
@@ -66,6 +42,30 @@ public class IncomeDAO extends TransactionDAO<Income> {
             }
         }
         return income;
+    }
+
+    @Override
+    public List<Income> getByUserId(int userId) throws SQLException {
+        List<Income> incomes = new ArrayList<>();
+        String sql = "SELECT * FROM income WHERE user_id = ?";
+        
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, userId);
+            
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    Income income = new Income(
+                        rs.getInt("id"),
+                        rs.getInt("user_id"),
+                        rs.getDouble("amount"),
+                        rs.getString("source"),
+                        rs.getString("date")
+                    );
+                    incomes.add(income);
+                }
+            }
+        }
+        return incomes;
     }
 
     @Override

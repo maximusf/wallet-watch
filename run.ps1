@@ -23,23 +23,13 @@ Commands:
 "@ -ForegroundColor Cyan
 }
 
-function Start-Compilation {
-    Write-Host "Compiling source files..." -ForegroundColor Yellow
+function Compile {
+    Write-Host "Compiling source files..."
+    $sourceFiles = Get-ChildItem -Path "src" -Recurse -Include "*.java" | 
+        Where-Object { $_.Name -ne "IncomeTest.java" -and $_.Name -ne "ExpenseTest.java" } |
+        Select-Object -ExpandProperty FullName
     
-    $sourceFiles = @(
-        "src/util/Environment.java",
-        "src/models/Transaction.java",
-        "src/models/Income.java",
-        "src/models/Expense.java",
-        "src/dao/TransactionDAO.java",
-        "src/dao/IncomeDAO.java",
-        "src/dao/ExpenseDAO.java",
-        "src/test/IncomeTest.java",
-        "src/test/ExpenseTest.java",
-        "src/Main.java"
-    )
-    
-    & javac -d bin -cp "lib\mysql-connector-j-9.1.0.jar" $sourceFiles
+    javac -d bin -cp "lib/*" $sourceFiles
     
     if ($LASTEXITCODE -eq 0) {
         Write-Host "Compilation successful!" -ForegroundColor Green
@@ -53,24 +43,21 @@ function Start-Compilation {
 function Start-MainProgram {
     if (-not (Test-Path "bin/Main.class")) {
         Write-Host "Program not compiled. Running compilation first..." -ForegroundColor Yellow
-        if (-not (Start-Compilation)) { return }
+        if (-not (Compile)) { return }
     }
     Write-Host "Running main program..." -ForegroundColor Yellow
     & java -cp "bin;lib\mysql-connector-j-9.1.0.jar" Main
 }
 
 function Start-Tests {
-    if (-not (Test-Path "bin/test/IncomeTest.class") -or -not (Test-Path "bin/test/ExpenseTest.class")) {
+    if (-not (Test-Path "bin/test/WalletWatchTest.class")) {
         Write-Host "Tests not compiled. Running compilation first..." -ForegroundColor Yellow
-        if (-not (Start-Compilation)) { return }
+        if (-not (Compile)) { return }
     }
     Write-Host "Running tests..." -ForegroundColor Yellow
     
-    Write-Host "`nRunning Income Tests:" -ForegroundColor Cyan
-    & java -cp "bin;lib\mysql-connector-j-9.1.0.jar" test.IncomeTest
-    
-    Write-Host "`nRunning Expense Tests:" -ForegroundColor Cyan
-    & java -cp "bin;lib\mysql-connector-j-9.1.0.jar" test.ExpenseTest
+    Write-Host "`nRunning Wallet-Watch Tests:" -ForegroundColor Cyan
+    & java -cp "bin;lib\mysql-connector-j-9.1.0.jar" test.WalletWatchTest
 }
 
 function Reset-Database {
@@ -96,7 +83,7 @@ function Remove-CompiledFiles {
 
 function Start-All {
     Write-Host "Running full build and test sequence..." -ForegroundColor Yellow
-    if (Start-Compilation) {
+    if (Compile) {
         Reset-Database
         Start-Tests
         Write-Host "All tasks completed" -ForegroundColor Green
@@ -104,7 +91,7 @@ function Start-All {
 }
 
 switch ($command.ToLower()) {
-    "compile" { Start-Compilation }
+    "compile" { Compile }
     "run" { Start-MainProgram }
     "test" { Start-Tests }
     "reset" { Reset-Database }

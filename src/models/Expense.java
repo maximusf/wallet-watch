@@ -17,9 +17,7 @@ public class Expense extends Transaction {
         this.category = category;
     }
 
-    public String getCategory() {
-        return category;
-    }
+    public String getCategory() { return category; }
 
     public void setCategory(String category) {
         if (category == null || category.trim().isEmpty()) {
@@ -29,9 +27,7 @@ public class Expense extends Transaction {
     }
 
     @Override
-    public String getTransactionType() {
-        return "Expense";
-    }
+    public String getTransactionType() { return "Expense"; }
 
     @Override
     public String toString() {

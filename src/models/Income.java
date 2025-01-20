@@ -15,20 +15,15 @@ public class Income extends Transaction {
         this.source = source;
     }
 
-    public String getSource() {
-        return source;
-    }
+    public String getTransactionType() { return "Income"; }
+
+    public String getSource() { return source; }
 
     public void setSource(String source) {
         if (source == null || source.trim().isEmpty()) {
             throw new IllegalArgumentException("Source cannot be empty");
         }
         this.source = source;
-    }
-
-    @Override
-    public String getTransactionType() {
-        return "Income";
     }
 
     @Override

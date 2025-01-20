@@ -7,6 +7,10 @@ package models;
  * Base class for financial transactions
  * Contains common properties shared by Income and Expense
  */
+// used abstract class to enforce that all transactions have a transaction type
+// in simple terms, it means that the class cannot be instantiated directly, but must be subclassed
+// meaning it needs to be implemented by a child class before it can be used
+// used protected fields to enforce that all transactions have a transaction type
 public abstract class Transaction {
     protected int id;         // Database ID (auto-generated)
     protected int userId;     // User this transaction belongs to
